@@ -21,7 +21,7 @@ export default function TodayScreen() {
   return (
     <ScrollView style={[styles.container, { backgroundColor: theme.background }]}>
       <Text style={[styles.dateHeader, { color: theme.text }]}>
-        {new Date().toLocaleDateString()}
+        {formattedDate}
       </Text>
 
       {exercises.map((ex) => (

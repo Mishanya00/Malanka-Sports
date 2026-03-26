@@ -5,17 +5,17 @@ import { useSettings } from '../context/settings-context';
 import { i18n } from '../i18n';
 
 export default function TabLayout() {
-  const { isDark, locale } = useSettings();
+  const { isDark, locale } = useSettings(); 
   const theme = isDark ? Colors.dark : Colors.light;
 
   return (
     <Tabs 
-      key={locale}
+      key={locale} 
       screenOptions={{
         tabBarActiveTintColor: theme.tabIconSelected,
         tabBarInactiveTintColor: theme.tabIconDefault,
         tabBarStyle: { backgroundColor: theme.card, borderTopColor: isDark ? '#333' : '#eee' },
-        headerStyle: { backgroundColor: theme.border },
+        headerStyle: { backgroundColor: theme.card },
         headerTintColor: theme.text,
       }}
     >
@@ -23,6 +23,7 @@ export default function TabLayout() {
         name="index" 
         options={{
           title: i18n.t('today'),
+          tabBarLabel: i18n.t('today'),
           tabBarIcon: ({ color }) => <Ionicons name="flash" size={24} color={color} />,
         }} 
       />
@@ -30,6 +31,7 @@ export default function TabLayout() {
         name="calendar" 
         options={{
           title: i18n.t('calendar'),
+          tabBarLabel: i18n.t('calendar'),
           tabBarIcon: ({ color }) => <Ionicons name="calendar" size={24} color={color} />,
         }} 
       />
@@ -37,6 +39,7 @@ export default function TabLayout() {
         name="settings" 
         options={{
           title: i18n.t('settings'),
+          tabBarLabel: i18n.t('settings'),
           tabBarIcon: ({ color }) => <Ionicons name="settings" size={24} color={color} />,
         }} 
       />
@@ -44,6 +47,7 @@ export default function TabLayout() {
         name="profile" 
         options={{
           title: i18n.t('profile'),
+          tabBarLabel: i18n.t('profile'),
           tabBarIcon: ({ color }) => <Ionicons name="person" size={24} color={color} />,
         }} 
       />
