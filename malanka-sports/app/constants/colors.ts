@@ -1,14 +1,31 @@
+const malankaColorLight = '#FFD700';
+const malankaColorDark = '#FFD700';
+
 export const Colors = {
   light: {
-    background: "#E6F4FE",
-    text: "#000000",
-    boltOutline: "#D1D1D1",
-    accent: "#FFD700",
+    text: '#000000',
+    textSecondary: '#666666',
+    background: '#E6F4FE',
+    card: '#FFFFFF',
+    malanka: malankaColorLight,
+    tabIconDefault: '#CCCCCC',
+    tabIconSelected: malankaColorLight,
+    success: '#4CAF50',
+    danger: '#F44336',
+    border: '#DDDDDD',
+    boltOutline: '#D1D1D1',
   },
   dark: {
-    background: "#000000",
-    text: "#FFFFFF",
-    boltOutline: "#333333",
-    accent: "#FFD700",
+    text: '#FFFFFF',
+    textSecondary: '#AAAAAA',
+    background: '#000000',
+    card: '#1C1C1E',
+    malanka: malankaColorDark,
+    tabIconDefault: '#444444',
+    tabIconSelected: malankaColorDark,
+    success: '#4CAF50',
+    danger: '#F44336',
+    border: '#333333',
+    boltOutline: '#333333',
   },
 };

@@ -48,7 +48,7 @@ export const AnimatedSplashScreen = ({ onAnimationFinish }: Props) => {
         </Svg>
         <AnimatedView style={[styles.fillWrapper, { height: fillAnim.interpolate({ inputRange: [0, 1], outputRange: [0, 120] }) }]}>
           <Svg width="120" height="120" viewBox="0 0 24 24" style={styles.boltSvgAbsolute}>
-            <Path d={boltPath} fill={theme.accent} />
+            <Path d={boltPath} fill={Colors.dark.malanka} />
           </Svg>
         </AnimatedView>
       </View>
