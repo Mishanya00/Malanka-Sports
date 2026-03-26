@@ -1,7 +1,9 @@
+import * as SplashScreen from "expo-splash-screen";
 import React, { useEffect, useRef } from "react";
-import { Animated, StyleSheet, Text, useColorScheme, View } from "react-native";
+import { Animated, StyleSheet, Text, View } from "react-native";
 import Svg, { Path } from "react-native-svg";
 import { Colors } from "../constants/colors";
+import { useSettings } from "../context/settings-context";
 
 const AnimatedView = Animated.createAnimatedComponent(View);
 
@@ -10,8 +12,8 @@ interface Props {
 }
 
 export const AnimatedSplashScreen = ({ onAnimationFinish }: Props) => {
-  const colorScheme = useColorScheme() ?? "light";
-  const theme = Colors[colorScheme];
+  const { isDark } = useSettings();
+  const theme = isDark ? Colors.dark : Colors.light;
 
   const fillAnim = useRef(new Animated.Value(0)).current;
   const textOpacity = useRef(new Animated.Value(0)).current;
@@ -20,6 +22,8 @@ export const AnimatedSplashScreen = ({ onAnimationFinish }: Props) => {
   const boltPath = "M13 2L3 14h9l-1 8 10-12h-9l1-8z";
 
   useEffect(() => {
+    SplashScreen.hideAsync();
+
     Animated.sequence([
       Animated.timing(fillAnim, {
         toValue: 1,
@@ -41,30 +45,32 @@ export const AnimatedSplashScreen = ({ onAnimationFinish }: Props) => {
   }, []);
 
   return (
-    <Animated.View style={[styles.container, { backgroundColor: theme.background, opacity: screenFade }]}>
-      <View style={styles.iconContainer}>
-        <Svg width="120" height="120" viewBox="0 0 24 24" style={styles.boltSvg}>
-          <Path d={boltPath} fill={theme.boltOutline} />
-        </Svg>
-        <AnimatedView style={[styles.fillWrapper, { height: fillAnim.interpolate({ inputRange: [0, 1], outputRange: [0, 120] }) }]}>
-          <Svg width="120" height="120" viewBox="0 0 24 24" style={styles.boltSvgAbsolute}>
-            <Path d={boltPath} fill={Colors.dark.malanka} />
+    <View style={{ flex: 1, backgroundColor: theme.background }}>
+      <Animated.View style={[styles.container, { backgroundColor: theme.background, opacity: screenFade }]}>
+        <View style={styles.iconContainer}>
+          <Svg width="120" height="120" viewBox="0 0 24 24" style={styles.boltSvg}>
+            <Path d={boltPath} fill={theme.boltOutline} />
           </Svg>
-        </AnimatedView>
-      </View>
-
-      <Animated.View style={{ opacity: textOpacity, alignItems: "center" }}>
-        <Text style={[styles.title, { color: theme.text }]}>Malanka Sports</Text>
-        <View style={styles.loadingBarBg}>
-          <AnimatedView
-            style={[
-              styles.loadingBarIndicator,
-              { width: fillAnim.interpolate({ inputRange: [0, 1], outputRange: ["0%", "100%"] }) },
-            ]}
-          />
+          <AnimatedView style={[styles.fillWrapper, { height: fillAnim.interpolate({ inputRange: [0, 1], outputRange: [0, 120] }) }]}>
+            <Svg width="120" height="120" viewBox="0 0 24 24" style={styles.boltSvgAbsolute}>
+              <Path d={boltPath} fill={Colors.dark.malanka} />
+            </Svg>
+          </AnimatedView>
         </View>
+
+        <Animated.View style={{ opacity: textOpacity, alignItems: "center" }}>
+          <Text style={[styles.title, { color: theme.text }]}>Malanka Sports</Text>
+          <View style={styles.loadingBarBg}>
+            <AnimatedView
+              style={[
+                styles.loadingBarIndicator,
+                { width: fillAnim.interpolate({ inputRange: [0, 1], outputRange: ["0%", "100%"] }) },
+              ]}
+            />
+          </View>
+        </Animated.View>
       </Animated.View>
-    </Animated.View>
+    </View>
   );
 };
 

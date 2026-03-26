@@ -4,8 +4,14 @@ import { Colors } from '../constants/colors';
 import { useSettings } from '../context/settings-context';
 
 export default function TodayScreen() {
-  const { isDark } = useSettings();
+  const { isDark, locale } = useSettings();
   const theme = isDark ? Colors.dark : Colors.light;
+
+  const formattedDate = new Date().toLocaleDateString(locale === 'be' ? 'be-BY' : 'en-US', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  });
 
   const exercises = [
     { id: 1, title: 'Pull-Ups', reps: '3x20' },

@@ -33,11 +33,11 @@
         "expo-splash-screen",
         {
           "image": "./assets/images/transparent_pixel.png",
-          "iconBackgroundColor": "#00000000",
-          "backgroundColor": "#ffffff",
+          //"iconBackgroundColor": "#00000000",
+          "backgroundColor": "#E6F4FE",
           "dark": {
-            "backgroundColor": "#000000",
-            "iconBackgroundColor": "#00000000"
+            "backgroundColor": "#000000"
+            //"iconBackgroundColor": "#00000000"
           }
         }
       ],

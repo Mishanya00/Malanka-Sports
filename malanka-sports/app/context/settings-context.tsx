@@ -8,6 +8,7 @@ type SettingsContextType = {
   toggleTheme: () => void;
   locale: string;
   changeLocale: (lang: 'en' | 'be') => void;
+  isSettingsLoaded: boolean;
 };
 
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
@@ -16,20 +17,23 @@ export const SettingsProvider = ({ children }: { children: React.ReactNode }) =>
   const systemTheme = useColorScheme() === 'dark';
   const [isDark, setIsDark] = useState(systemTheme);
   const [locale, setLocale] = useState(i18n.locale);
+  const [isSettingsLoaded, setIsSettingsLoaded] = useState(false);
 
   useEffect(() => {
     const loadSettings = async () => {
       try {
-        const appTheme = await AsyncStorage.getItem('theme');
-        const appLang = await AsyncStorage.getItem('language');
+        const savedTheme = await AsyncStorage.getItem('theme');
+        const savedLang = await AsyncStorage.getItem('language');
         
-        if (appTheme) setIsDark(appTheme === 'dark');
-        if (appLang) {
-          setLocale(appLang);
-          i18n.locale = appLang;
+        if (savedTheme !== null) setIsDark(savedTheme === 'dark');
+        if (savedLang !== null) {
+          setLocale(savedLang);
+          i18n.locale = savedLang;
         }
       } catch (e) {
-        console.error("Failed to load application settings");
+        console.error("Settings load error", e);
+      } finally {
+        setIsSettingsLoaded(true);
       }
     };
     loadSettings();
@@ -42,13 +46,13 @@ export const SettingsProvider = ({ children }: { children: React.ReactNode }) =>
   };
 
   const changeLocale = async (lang: 'en' | 'be') => {
-    setLocale(lang);
     i18n.locale = lang;
+    setLocale(lang);
     await AsyncStorage.setItem('language', lang);
   };
 
   return (
-    <SettingsContext.Provider value={{ isDark, toggleTheme, locale, changeLocale }}>
+    <SettingsContext.Provider value={{ isDark, toggleTheme, locale, changeLocale, isSettingsLoaded }}>
       {children}
     </SettingsContext.Provider>
   );

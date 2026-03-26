@@ -5,17 +5,20 @@ import { useSettings } from '../context/settings-context';
 import { i18n } from '../i18n';
 
 export default function TabLayout() {
-  const { isDark } = useSettings();
+  const { isDark, locale } = useSettings();
   const theme = isDark ? Colors.dark : Colors.light;
 
   return (
-    <Tabs screenOptions={{
-      tabBarActiveTintColor: theme.tabIconSelected,
-      tabBarInactiveTintColor: theme.tabIconDefault,
-      tabBarStyle: { backgroundColor: theme.card, borderTopColor: isDark ? '#333' : '#eee' },
-      headerStyle: { backgroundColor: theme.border },
-      headerTintColor: theme.text,
-    }}>
+    <Tabs 
+      key={locale}
+      screenOptions={{
+        tabBarActiveTintColor: theme.tabIconSelected,
+        tabBarInactiveTintColor: theme.tabIconDefault,
+        tabBarStyle: { backgroundColor: theme.card, borderTopColor: isDark ? '#333' : '#eee' },
+        headerStyle: { backgroundColor: theme.border },
+        headerTintColor: theme.text,
+      }}
+    >
       <Tabs.Screen 
         name="index" 
         options={{
