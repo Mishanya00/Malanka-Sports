@@ -1,13 +1,15 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Colors } from '../constants/colors';
 import { useSettings } from '../context/settings-context';
 
 export default function TodayScreen() {
-  const { isDark, locale } = useSettings();
+  const { isDark } = useSettings();
+  const { i18n } = useTranslation();
   const theme = isDark ? Colors.dark : Colors.light;
 
-  const formattedDate = new Date().toLocaleDateString(locale === 'be' ? 'be-BY' : 'en-US', {
+  const formattedDate = new Date().toLocaleDateString(i18n.language === 'be' ? 'be-BY' : 'en-US', {
     day: 'numeric',
     month: 'long',
     year: 'numeric'

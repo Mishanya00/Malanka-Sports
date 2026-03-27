@@ -1,12 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useColorScheme } from 'react-native';
-import { i18n } from '../i18n';
+import i18n from '../i18n';
 
 type SettingsContextType = {
   isDark: boolean;
   toggleTheme: () => void;
-  locale: string;
   changeLocale: (lang: 'en' | 'be') => void;
   isSettingsLoaded: boolean;
 };
@@ -16,7 +15,6 @@ const SettingsContext = createContext<SettingsContextType | undefined>(undefined
 export const SettingsProvider = ({ children }: { children: React.ReactNode }) => {
   const systemTheme = useColorScheme() === 'dark';
   const [isDark, setIsDark] = useState(systemTheme);
-  const [locale, setLocale] = useState(i18n.locale);
   const [isSettingsLoaded, setIsSettingsLoaded] = useState(false);
 
   useEffect(() => {
@@ -27,8 +25,7 @@ export const SettingsProvider = ({ children }: { children: React.ReactNode }) =>
         
         if (savedTheme !== null) setIsDark(savedTheme === 'dark');
         if (savedLang !== null) {
-          setLocale(savedLang);
-          i18n.locale = savedLang;
+          await i18n.changeLanguage(savedLang);
         }
       } catch (e) {
         console.error("Settings load error", e);
@@ -46,13 +43,12 @@ export const SettingsProvider = ({ children }: { children: React.ReactNode }) =>
   };
 
   const changeLocale = async (lang: 'en' | 'be') => {
-    i18n.locale = lang;
-    setLocale(lang);
+    await i18n.changeLanguage(lang);
     await AsyncStorage.setItem('language', lang);
   };
 
   return (
-    <SettingsContext.Provider value={{ isDark, toggleTheme, locale, changeLocale, isSettingsLoaded }}>
+    <SettingsContext.Provider value={{ isDark, toggleTheme, changeLocale, isSettingsLoaded }}>
       {children}
     </SettingsContext.Provider>
   );

@@ -1,16 +1,16 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { Colors } from '../constants/colors';
 import { useSettings } from '../context/settings-context';
-import { i18n } from '../i18n';
 
 export default function TabLayout() {
-  const { isDark, locale } = useSettings(); 
+  const { isDark } = useSettings();
+  const { t } = useTranslation();
   const theme = isDark ? Colors.dark : Colors.light;
 
   return (
-    <Tabs 
-      key={locale} 
+    <Tabs
       screenOptions={{
         tabBarActiveTintColor: theme.tabIconSelected,
         tabBarInactiveTintColor: theme.tabIconDefault,
@@ -22,32 +22,32 @@ export default function TabLayout() {
       <Tabs.Screen 
         name="index" 
         options={{
-          title: i18n.t('today'),
-          tabBarLabel: i18n.t('today'),
+          title: t('today'),
+          tabBarLabel: t('today'),
           tabBarIcon: ({ color }) => <Ionicons name="flash" size={24} color={color} />,
         }} 
       />
       <Tabs.Screen 
         name="calendar" 
         options={{
-          title: i18n.t('calendar'),
-          tabBarLabel: i18n.t('calendar'),
+          title: t('calendar'),
+          tabBarLabel: t('calendar'),
           tabBarIcon: ({ color }) => <Ionicons name="calendar" size={24} color={color} />,
         }} 
       />
       <Tabs.Screen 
         name="settings" 
         options={{
-          title: i18n.t('settings'),
-          tabBarLabel: i18n.t('settings'),
+          title: t('settings'),
+          tabBarLabel: t('settings'),
           tabBarIcon: ({ color }) => <Ionicons name="settings" size={24} color={color} />,
         }} 
       />
       <Tabs.Screen 
         name="profile" 
         options={{
-          title: i18n.t('profile'),
-          tabBarLabel: i18n.t('profile'),
+          title: t('profile'),
+          tabBarLabel: t('profile'),
           tabBarIcon: ({ color }) => <Ionicons name="person" size={24} color={color} />,
         }} 
       />
