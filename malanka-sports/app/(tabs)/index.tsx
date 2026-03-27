@@ -23,10 +23,9 @@ export default function TodayScreen() {
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
   
-  // Состояния для полей ввода
   const [newTitle, setNewTitle] = useState('');
   const [newReps, setNewReps] = useState('');
-  // Если editingId не null, значит мы редактируем существующую запись
+
   const [editingId, setEditingId] = useState<number | null>(null);
 
   const todayStr = new Date().toISOString().split('T')[0];
@@ -42,7 +41,6 @@ export default function TodayScreen() {
 
   useFocusEffect(useCallback(() => { loadExercises(); }, []));
 
-  // Открытие модалки для создания
   const openAddModal = () => {
     setEditingId(null);
     setNewTitle('');
@@ -50,7 +48,6 @@ export default function TodayScreen() {
     setModalVisible(true);
   };
 
-  // Открытие модалки для редактирования
   const openEditModal = (ex: Exercise) => {
     setEditingId(ex.id);
     setNewTitle(ex.title);
@@ -63,13 +60,11 @@ export default function TodayScreen() {
 
     try {
       if (editingId) {
-        // РЕДАКТИРОВАНИЕ
         db.runSync(
           'UPDATE exercises SET title = ?, reps = ? WHERE id = ?',
           [newTitle, newReps, editingId]
         );
       } else {
-        // СОЗДАНИЕ
         db.runSync(
           'INSERT INTO exercises (title, reps, date, status) VALUES (?, ?, ?, ?)',
           [newTitle, newReps, todayStr, 'pending']
@@ -126,7 +121,6 @@ export default function TodayScreen() {
                 </Text>
                 <Text style={{ color: theme.textSecondary }}>{ex.reps}</Text>
                 
-                {/* Кнопки управления (Изменить/Удалить) снизу текста */}
                 <View style={styles.manageButtons}>
                   <TouchableOpacity onPress={() => openEditModal(ex)}>
                     <Ionicons name="create-outline" size={20} color={theme.textSecondary} />

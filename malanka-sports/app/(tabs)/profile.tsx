@@ -14,6 +14,7 @@ export default function ProfileScreen() {
   const menuItems = [
     { icon: 'bar-chart', title: t('stats'), route: '/stats' },
     { icon: 'person', title: t('profileDetails'), route: '/profile' },
+    { icon: 'newspaper', title: t('news'), route: '/news' },
     { icon: 'information-circle', title: t('about'), route: '/about' },
   ];
 

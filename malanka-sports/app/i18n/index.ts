@@ -23,6 +23,9 @@ const resources = {
       noExercises: 'No exercises planned for today. Tap + to add!',
       editExercise: 'Edit Exercise',
       edit: 'Edit',
+      news: 'Sports News',
+      offlineMode: 'Offline Mode (Cached Data)',
+      readMore: 'Read More',
     },
   },
   be: {
@@ -45,6 +48,9 @@ const resources = {
       noExercises: 'На сёння няма практыкаванняў. Націсніце + каб дадаць!',
       editExercise: 'Змяніць практыкаванне',
       edit: 'Змяніць',
+      news: 'Спартыўныя навіны',
+      offlineMode: 'Афлайн рэжым (Кэш)',
+      readMore: 'Чытаць далей',
     },
   },
 };
