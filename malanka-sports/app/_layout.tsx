@@ -34,6 +34,7 @@ function MainAppContent() {
       <Stack.Screen name="(tabs)" />
       <Stack.Screen name="stats" options={{ presentation: 'modal', headerShown: true }} />
       <Stack.Screen name="about" options={{ presentation: 'modal', headerShown: true }} />
+      <Stack.Screen name="news" options={{ presentation: 'modal', headerShown: true }} />
     </Stack>
   );
 }
