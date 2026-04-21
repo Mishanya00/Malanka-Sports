@@ -45,3 +45,4 @@ app-example
 
 # Python
 *.venv
+*.pyc
