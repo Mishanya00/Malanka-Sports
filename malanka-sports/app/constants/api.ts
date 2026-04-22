@@ -1,1 +1,1 @@
-export const BACKEND_URL = 'http://10.20.100.130:8000';
+export const BACKEND_URL = 'http://192.168.0.125:8000';

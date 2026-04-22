@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { Colors } from '../../constants/colors';
+import { useAuth } from '../../context/auth-context';
 import { useSettings } from '../../context/settings-context';
 import { db } from '../../database/db';
 
@@ -11,8 +12,10 @@ export default function DayScreen() {
   const { date } = useLocalSearchParams<{ date: string }>();
   const router = useRouter();
   const { isDark } = useSettings();
-  const { t } = useTranslation();
+  const { user } = useAuth();
+  useTranslation();
   const theme = isDark ? Colors.dark : Colors.light;
+  const userId = user?.user_id ?? 0;
 
   const [exercises, setExercises] = useState<any[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
@@ -20,17 +23,25 @@ export default function DayScreen() {
   const [newReps, setNewReps] = useState('');
 
   const loadExercises = () => {
-    const result = db.getAllSync('SELECT * FROM exercises WHERE date = ?', [date]);
+    if (!userId) return;
+    const result = db.getAllSync(
+      'SELECT * FROM exercises WHERE user_id = ? AND date = ? AND is_deleted = 0 ORDER BY id',
+      [userId, date]
+    );
     setExercises(result);
   };
 
-  useEffect(() => { loadExercises(); }, [date]);
+  useEffect(() => {
+    loadExercises();
+    const interval = setInterval(loadExercises, 3000);
+    return () => clearInterval(interval);
+  }, [date, userId]);
 
   const saveExercise = () => {
-    if (!newTitle.trim() || !newReps.trim()) return;
+    if (!newTitle.trim() || !newReps.trim() || !userId) return;
     db.runSync(
-      'INSERT INTO exercises (title, reps, date, status) VALUES (?, ?, ?, ?)',
-      [newTitle, newReps, date, 'pending']
+      'INSERT INTO exercises (user_id, title, reps, date, status, is_deleted, updated_at) VALUES (?, ?, ?, ?, ?, 0, ?)',
+      [userId, newTitle, newReps, date, 'pending', Date.now()]
     );
     setModalVisible(false);
     setNewTitle('');

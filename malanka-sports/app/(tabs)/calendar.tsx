@@ -5,22 +5,25 @@ import { useTranslation } from 'react-i18next';
 import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { DateData, Calendar as RNCalendar } from 'react-native-calendars';
 import { Colors } from '../constants/colors';
+import { useAuth } from '../context/auth-context';
 import { useSettings } from '../context/settings-context';
 import { searchExercises } from '../database/db';
 
 export default function CalendarScreen() {
   const { isDark } = useSettings();
   const { t } = useTranslation();
+  const { user } = useAuth();
   const router = useRouter();
   const theme = isDark ? Colors.dark : Colors.light;
+  const userId = user?.user_id ?? 0;
 
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<any[]>([]);
 
   const handleSearch = (text: string) => {
     setSearchQuery(text);
-    if (text.length > 1) {
-      const results = searchExercises({ query: text });
+    if (text.length > 1 && userId) {
+      const results = searchExercises(userId, { query: text });
       setSearchResults(results);
     } else {
       setSearchResults([]);

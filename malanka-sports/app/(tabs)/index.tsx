@@ -4,6 +4,7 @@ import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert, Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { Colors } from '../constants/colors';
+import { useAuth } from '../context/auth-context';
 import { useSettings } from '../context/settings-context';
 import { db } from '../database/db';
 
@@ -18,28 +19,40 @@ type Exercise = {
 export default function TodayScreen() {
   const { isDark } = useSettings();
   const { t, i18n } = useTranslation();
+  const { user } = useAuth();
   const theme = isDark ? Colors.dark : Colors.light;
 
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
-  
+
   const [newTitle, setNewTitle] = useState('');
   const [newReps, setNewReps] = useState('');
 
   const [editingId, setEditingId] = useState<number | null>(null);
 
   const todayStr = new Date().toISOString().split('T')[0];
+  const userId = user?.user_id ?? 0;
 
   const loadExercises = () => {
+    if (!userId) return;
     try {
-      const result = db.getAllSync('SELECT * FROM exercises WHERE date = ?', [todayStr]) as Exercise[];
+      const result = db.getAllSync(
+        'SELECT * FROM exercises WHERE user_id = ? AND date = ? AND is_deleted = 0 ORDER BY id',
+        [userId, todayStr]
+      ) as Exercise[];
       setExercises(result);
     } catch (e) {
       console.error(e);
     }
   };
 
-  useFocusEffect(useCallback(() => { loadExercises(); }, []));
+  useFocusEffect(
+    useCallback(() => {
+      loadExercises();
+      const interval = setInterval(loadExercises, 3000);
+      return () => clearInterval(interval);
+    }, [userId])
+  );
 
   const openAddModal = () => {
     setEditingId(null);
@@ -56,18 +69,19 @@ export default function TodayScreen() {
   };
 
   const saveExercise = () => {
-    if (!newTitle.trim() || !newReps.trim()) return;
+    if (!newTitle.trim() || !newReps.trim() || !userId) return;
 
     try {
+      const now = Date.now();
       if (editingId) {
         db.runSync(
-          'UPDATE exercises SET title = ?, reps = ? WHERE id = ?',
-          [newTitle, newReps, editingId]
+          'UPDATE exercises SET title = ?, reps = ?, updated_at = ? WHERE id = ? AND user_id = ?',
+          [newTitle, newReps, now, editingId, userId]
         );
       } else {
         db.runSync(
-          'INSERT INTO exercises (title, reps, date, status) VALUES (?, ?, ?, ?)',
-          [newTitle, newReps, todayStr, 'pending']
+          'INSERT INTO exercises (user_id, title, reps, date, status, is_deleted, updated_at) VALUES (?, ?, ?, ?, ?, 0, ?)',
+          [userId, newTitle, newReps, todayStr, 'pending', now]
         );
       }
       setModalVisible(false);
@@ -78,8 +92,12 @@ export default function TodayScreen() {
   };
 
   const updateStatus = (id: number, status: 'completed' | 'failed' | 'pending') => {
+    if (!userId) return;
     try {
-      db.runSync('UPDATE exercises SET status = ? WHERE id = ?', [status, id]);
+      db.runSync(
+        'UPDATE exercises SET status = ?, updated_at = ? WHERE id = ? AND user_id = ?',
+        [status, Date.now(), id, userId]
+      );
       loadExercises();
     } catch (e) {
       console.error(e);
@@ -87,10 +105,14 @@ export default function TodayScreen() {
   };
 
   const deleteExercise = (id: number) => {
+    if (!userId) return;
     Alert.alert(t('delete'), t('delete') + '?', [
       { text: t('cancel'), style: 'cancel' },
       { text: t('delete'), style: 'destructive', onPress: () => {
-          db.runSync('DELETE FROM exercises WHERE id = ?', [id]);
+          db.runSync(
+            'UPDATE exercises SET is_deleted = 1, updated_at = ? WHERE id = ? AND user_id = ?',
+            [Date.now(), id, userId]
+          );
           loadExercises();
         }
       }
