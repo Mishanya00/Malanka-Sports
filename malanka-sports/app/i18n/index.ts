@@ -46,6 +46,14 @@ const resources = {
       statsShareTelegram: 'Share via Telegram',
       statsShareMessage:
         "My Malanka Sports progress ⚡\nCompleted: {{completed}} / {{total}}\nFailed: {{failed}}\nPending: {{pending}}\nCompletion rate: {{rate}}%",
+      sendTestNotification: 'Send Test Notification',
+      sendTestNotificationHint: 'Fires a local notification in 2 seconds.',
+      notificationsSentTitle: 'Scheduled',
+      notificationsSentBody: 'Test notification will appear in ~2 seconds. You can switch to another app to see it.',
+      notificationsDeniedTitle: 'Notifications disabled',
+      notificationsDeniedBody: 'Enable notifications for Malanka Sports in system settings.',
+      notificationsNotDeviceTitle: 'Real device required',
+      notificationsNotDeviceBody: 'Notifications only work on a physical device, not a simulator/emulator web preview.',
     },
   },
   be: {
@@ -91,6 +99,14 @@ const resources = {
       statsShareTelegram: 'Падзяліцца праз Telegram',
       statsShareMessage:
         'Мае вынікі ў Malanka Sports ⚡\nВыканана: {{completed}} / {{total}}\nНе выканана: {{failed}}\nУ чаканні: {{pending}}\nПрацэнт выканання: {{rate}}%',
+      sendTestNotification: 'Даслаць тэставае апавяшчэнне',
+      sendTestNotificationHint: 'Пакажа лакальнае апавяшчэнне праз 2 секунды.',
+      notificationsSentTitle: 'Запланавана',
+      notificationsSentBody: 'Тэставае апавяшчэнне з\'явіцца праз ~2 секунды. Можаце згарнуць прыкладанне, каб убачыць баннер.',
+      notificationsDeniedTitle: 'Апавяшчэнні адключаны',
+      notificationsDeniedBody: 'Уключыце апавяшчэнні для Malanka Sports у наладах сістэмы.',
+      notificationsNotDeviceTitle: 'Патрэбна рэальнае прыладу',
+      notificationsNotDeviceBody: 'Апавяшчэнні працуюць толькі на рэальнай прыладзе.',
     },
   },
 };
